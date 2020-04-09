@@ -12,16 +12,16 @@ function Get-TwitchLiveStream {
         [psobject]
         $InputObject,
 
-        $Token = $Script:Token
+        $Token = $global:PSTwitch.Token
     )
 
     process {
 
         if ($PSCmdlet.ParameterSetName -eq 'Pipeline') {
             foreach ($user in $InputObject) {
-                $streamsUri = "{0}/streams?user_login={1}" -f $Script:Uri, $user.UserName
+                $streamsUri = "{0}/streams?user_login={1}" -f $global:PSTwitch.Uri, $user.UserName
 
-                $streamsResults = Invoke-RestMethod -Uri $streamsUri -Headers $script:Headers
+                $streamsResults = Invoke-RestMethod -Uri $streamsUri -Headers $global:PSTwitch.Headers
 
                 if ($streamsResults.data) {
                     [PSCustomObject]@{
@@ -37,8 +37,8 @@ function Get-TwitchLiveStream {
             }
         }
         else {
-            $streamsUri = "{0}/streams?user_login={1}" -f $Script:Uri, $UserName
-            $streamsResults = Invoke-RestMethod -Uri $streamsUri -Headers $script:Headers
+            $streamsUri = "{0}/streams?user_login={1}" -f $global:PSTwitch.Uri, $UserName
+            $streamsResults = Invoke-RestMethod -Uri $streamsUri -Headers $global:PSTwitch.Headers
 
             if ($streamsResults.data) {
                 [PSCustomObject]@{

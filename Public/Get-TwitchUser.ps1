@@ -3,13 +3,13 @@ function Get-TwitchUser {
         [string]
         $UserName,
 
-        $Token = $Script:Token
+        $Token = $global:PSTwitch.Token
     )
 
-    $usersUri = "{0}/users/?login={1}" -f $script:Uri, $UserName
+    $usersUri = "{0}/users/?login={1}" -f $global:PSTwitch.Uri, $UserName
 
     try {
-        Invoke-RestMethod -Uri $usersUri -Method Get -Headers $Script:Headers |
+        Invoke-RestMethod -Uri $usersUri -Method Get -Headers $global:PSTwitch.Headers |
             Select-Object -ExpandProperty Data | ForEach-Object {
                 [PSCustomObject]@{
                     UserId      = $_.id

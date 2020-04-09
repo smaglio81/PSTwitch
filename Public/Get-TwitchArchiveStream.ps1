@@ -13,14 +13,14 @@ function Get-TwitchArchiveStream {
         [psobject]
         $InputObject,
 
-        $Token = $Script:Token
+        $Token = $global:PSTwitch.Token
     )
 
     process {
         foreach ($user in $InputObject) {
-            $archiveUri = "{0}/videos?user_id={1}" -f $Script:Uri, $user.UserID
+            $archiveUri = "{0}/videos?user_id={1}" -f $global:PSTwitch.Uri, $user.UserID
             
-            $archiveResults = Invoke-RestMethod -Uri $archiveUri -Headers $script:Headers
+            $archiveResults = Invoke-RestMethod -Uri $archiveUri -Headers $global:PSTwitch.Headers
             
             $archiveResults.data | ForEach-Object {
                 [PSCustomObject]@{
@@ -32,9 +32,9 @@ function Get-TwitchArchiveStream {
         }
         if ($PSBoundParameters.ContainsKey('UserName')) {
             $userId = Get-TwitchUser -UserName $UserName | Select-Object -ExpandProperty UserId
-            $archiveUri = "{0}/videos?user_id={1}" -f $Script:Uri, $userId
+            $archiveUri = "{0}/videos?user_id={1}" -f $global:PSTwitch.Uri, $userId
             
-            $archiveResults = Invoke-RestMethod -Uri $archiveUri -Headers $script:Headers
+            $archiveResults = Invoke-RestMethod -Uri $archiveUri -Headers $global:PSTwitch.Headers
             
             if ($archiveResults.data) {
                 $archiveResults.data | ForEach-Object {
